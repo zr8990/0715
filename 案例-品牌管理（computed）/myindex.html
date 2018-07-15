@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <style>
+    .container {
+      margin-top: 50px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container" id="app">
+    <form class="form-inline">
+      <div class="form-group">
+        <label for="">id</label>
+        <input type="text" class="form-control" v-model="id">
+      </div>
+      <div class="form-group">
+        <label for="">名称</label>
+        <input type="email" class="form-control" v-model="name">
+      </div>
+      <button type="submit" class="btn btn-default" @click.prevent="add">添加</button>
+      |
+      <div class="form-group">
+        <label for="exampleInputEmail2">根据 name 过滤：</label>
+        <input type="text" class="form-control" v-model="filterText">
+      </div>
+    </form>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>创建时间</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 
+          将 filterData() 替换为 计算属性
+         -->
+        <tr v-for="item in filterData" :key="item.id">
+          <td>{{ item.id }}</td>
+          <td v-text="item.name"></td>
+          <td>{{ item.time | date }}</td>
+          <td><a href="#" @click.prevent="del(item.id)">删除</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+ <script src="./node_modules/moment/moment.js"></script>
+ <script src="./node_modules/vue/dist/vue.js"></script>
+  <script>
+  Vue.filter("date",function(input){
+    return moment(input).format('YYYY-MM-DD HH-mm-ss')
+  })
+  const vm = new Vue({
+    el:"#app",
+    data:{
+      list:[
+          { id: 1, name: '奔驰', time: new Date() },
+          { id: 2, name: '宝马', time: new Date() },
+          { id: 3, name: '玛莎拉蒂', time: new Date() },
+          { id: 4, name: '比亚迪唐', time: new Date() },
+      ],
+      id:"",
+      name:"",
+      filterText:''
+    },
+    computed:{
+      filterData(){
+        return this.list.filter((item)=>
+          item.name.indexOf(this.filterText)!==-1
+        )
+      }
+    },
+    methods:{
+      add(){
+        var brand = {
+          id:this.id,
+          name:this.name,
+          time:new Date()
+        }
+        this.list.push(brand)
+        this.id = '';
+        this.name ='';
+      },
+      del(id){
+        const index = this.list.findIndex((item)=>item.id === id)
+        this.list.splice(index,1)
+      }
+    }
+
+  });
+  </script>
+
+</body>
+
+</html>

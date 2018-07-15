@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    {{parentMsg}}
+    <hello></hello>
+    
+  </div>
+  <script src="./vue.js"></script>
+  <script>
+    Vue.component("hello",{
+      template:`<div>
+      <h1>这是一段组件内容</h1>
+      <i>这是一段文本</i>
+      <p>{{compMsg}}</p>
+      </div>`,
+      data:function(){
+        return {
+          compMsg:"这是组件自己的数据"
+        }
+      }
+    })
+    const vm = new Vue({
+      el: '#app',
+      data: {
+        parenyMsg:"这是父元素"
+      }
+    })
+  </script>
+</body>
+
+</html>

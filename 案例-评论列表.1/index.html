@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="./bootstrap/dist/css/bootstrap.min.css">
+</head>
+
+<body>
+  <div id="app" class="container">
+   <chead @getmsg="getmsg"></chead>
+    <clist :list="list"></clist>
+   
+  </div>
+</body>
+<script src="./vue.js"></script>
+<script>
+  Vue.component("clist",{
+    template:`
+    <ul>
+      <li v-for="item in list" :key="item.id">
+        <h3>评论人：{{item.name}}</h3>
+        <p>评论内容：{{item.content}}</p>
+      </li>
+      
+    </ul>
+    `,
+    props:["list"]
+  })
+  Vue.component("chead",{
+    template:`
+    <div>
+        <div class="form-group">
+      <label>评论人：</label>
+      <input type="text" class="form-control" placeholder="请输入姓名" v-model="cname">
+    </div>
+    <div class="form-group">
+      <label>评论内容：</label>
+      <textarea class="form-control" cols="30" rows="10" v-model="ctxt"></textarea>
+    </div>
+    <button class="btn btn-default" @click="passmsg">发表评论</button>
+    </div>
+    `,
+    data(){
+      return {
+        cname :"",
+        ctxt :''
+      }
+    },
+    methods:{
+      passmsg(){
+        this.$emit("getmsg",this.cname,this.ctxt);
+        this.cname = "";
+        this.ctxt = '';
+      }
+    }
+  })
+const vm = new Vue({
+  el:"#app",
+  data:{
+    list:[
+        {id:1,name:"jack",content:"where are you"},
+        {id:2,name:"Rose",content:"I am floating on the sea"},
+        {id:3,name:"jack",content:"what fun it is"},
+      ]
+  },
+  methods:{
+    
+    getmsg(name,content){
+      const id = this.list[this.list.length-1].id+1;
+      this.list.push({
+        id,name,content
+      })
+    }
+  }
+})
+
+</script>
+
+</html>

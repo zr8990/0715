@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  .parent {
+    width: 400px;
+    height: 400px;
+    background-color: red;
+  }
+  .child {
+    width: 250px;
+    height: 250px;
+    background-color: pink;
+  }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <parent></parent>
+  </div>
+  <script src="./vue.js"></script>
+  <script>
+    Vue.component("parent", {
+      template: `
+      <div class="parent">
+      <h1>这是父组件</h1>
+      <child :skill="parentMsg"></child>
+      </div>`,
+      data() {
+        return {
+          parentMsg: "赚钱"
+        }
+      }
+
+    })
+
+    Vue.component("child", {
+      template: `
+            <div class="child">
+            <h2>这是子组件{{skill}}</h2>
+            </div>
+            `,
+      props:["skill"]
+    })
+    const vm = new Vue({
+      el: '#app',
+      data: {
+
+      }
+    })
+  </script>
+</body>
+
+</html>

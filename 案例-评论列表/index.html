@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="./bootstrap/dist/css/bootstrap.min.css">
+</head>
+
+<body>
+  <div id="app" class="container">
+   <commentmessage @getmsg="getmsg"></commentmessage>
+
+      <commentcontent :list="list"></commentcontent>
+ </div>
+</body>
+<script src="./vue.js"></script>
+<script>
+  Vue.component("commentmessage",{
+    template:`
+    <div>
+        <div class="form-group">
+      <label>评论人：</label>
+      <input type="text" class="form-control" placeholder="请输入姓名" v-model="namee">
+    </div>
+    <div class="form-group">
+      <label>评论内容：</label>
+      <textarea class="form-control" cols="30" rows="10" v-model="contentt"></textarea>
+    </div>
+    <button class="btn btn-default" @click="transfermsg">发表评论</button>
+    </div> 
+    `,
+    data(){
+      return {
+        namee:'',
+        contentt:''
+      }
+    },
+    methods:{
+      transfermsg(){
+        this.$emit("getmsg",this.namee,this.contentt);
+        this.namee = "";
+        this.contentt = ""
+      }
+    }
+  })
+Vue.component("commentcontent",{
+  template:`
+  <ul>
+      <li v-for="item in list" :key="item.id">
+        <h3>评论人：{{item.name}}</h3>
+        <p>评论内容：{{item.content}}</p>
+      </li>
+     
+    </ul>  
+  `,
+  props:['list']
+})
+  var vm = new Vue({
+    el:"#app",
+    data:{
+      list:[
+        {id:1,name:"jack",content:"where are you"},
+        {id:2,name:"Rose",content:"I am floating on the sea"},
+        {id:3,name:"jack",content:"what fun it is"},
+      ]
+    },
+    
+    methods:{
+      getmsg(name,content){
+        const id = this.list[this.list.length-1].id+1
+         this.list.push({
+           id:id,
+           name:name,
+           content:content,
+         })
+        
+      }
+    },
+  
+  })
+</script>
+</html>
